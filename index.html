@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neymar Career Challenge - PSG Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #1a2b4c;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(45deg, #1a2b4c, #e30613, #1a2b4c);
+            background-size: 200% 200%;
+            animation: bgAnimation 15s ease infinite;
+        }
+
+        @keyframes bgAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Faixa vermelha vertical central */
+        .red-stripe {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 100%;
+            background-color: #e30613;
+            z-index: 0;
+            box-shadow: 0 0 20px rgba(227, 6, 19, 0.5);
+        }
+
+        /* Animação do Neymar em tela inteira (entrada) */
+        #neymar-animation {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            animation: neymarRun 3s linear forwards;
+            z-index: 2;
+        }
+
+        @keyframes neymarRun {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Animação do Neymar comemorando em tela inteira */
+        #neymar-celebration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 3;
+            display: none; /* Escondido por padrão */
+            animation: celebrationFade 1s ease;
+        }
+
+        @keyframes celebrationFade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Cabeçalho com logo do PSG */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(26, 43, 76, 0.95);
+            padding: 10px;
+            text-align: left;
+            z-index: 4; /* Acima da animação */
+        }
+
+        #psg-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        /* Container principal */
+        #main-container {
+            background-color: rgba(26, 43, 76, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1;
+            display: none;
+            border: 2px solid #e30613;
+            box-shadow: 0 0 15px rgba(227, 6, 19, 0.7);
+            max-width: 600px;
+            margin-top: 80px;
+        }
+
+        #login-container, #quiz-container {
+            display: none;
+        }
+
+        #login-container.active, #quiz-container.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(227, 6, 19, 0.5);
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #e30613;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 250px;
+            background-color: #fff;
+            color: #1a2b4c;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #e30613;
+            color: white;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff1a2e;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #question {
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            background-color: #1a2b4c;
+            border: 2px solid #e30613;
+        }
+
+        .options button:hover {
+            background-color: #2c4370;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img id="psg-logo" src="https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C._logo.svg" alt="PSG Logo">
+    </header>
+    <div class="red-stripe"></div>
+    <img id="neymar-animation" src="imagens/neima.jpg" alt="Neymar com bola">
+    <img id="neymar-celebration" src="imagens/neymar-celebration.jpg" alt="Neymar comemorando">
+    <div id="main-container">
+        <div id="login-container" class="active">
+            <h1>NeyCareer Challenge</h1>
+            <p>Digite seu nome para começar o desafio:</p>
+            <input type="text" id="username" placeholder="Seu nome">
+            <button onclick="startQuiz()">Entrar</button>
+        </div>
+        <div id="quiz-container">
+            <h1>Quiz - Carreira do Neymar</h1>
+            <div id="question"></div>
+            <div class="options" id="options"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Animação inicial
+        setTimeout(() => {
+            document.getElementById('neymar-animation').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+        }, 3000);
+
+        // Perguntas do quiz
+        const questions = [
+            { question: "Em que ano Neymar estreou profissionalmente pelo Santos?", options: ["2007", "2009", "2011", "2013"], answer: "2009" },
+            { question: "Qual foi o primeiro título internacional de Neymar com o Santos?", options: ["Copa do Brasil", "Libertadores", "Paulistão", "Recopa"], answer: "Libertadores" },
+            { question: "Quantos gols Neymar marcou na final da Libertadores de 2011?", options: ["0", "1", "2", "3"], answer: "1" },
+            { question: "Por quanto o Barcelona contratou Neymar em 2013?", options: ["€57M", "€88M", "€100M", "€222M"], answer: "€88M" },
+            { question: "Qual título o trio MSN (Messi, Suárez, Neymar) ganhou em 2015?", options: ["La Liga", "Champions League", "Copa do Rei", "Todos acima"], answer: "Todos acima" },
+            { question: "Quantos gols Neymar marcou na Champions League 2014-15?", options: ["7", "10", "12", "15"], answer: "10" },
+            { question: "Qual foi o valor da transferência de Neymar para o PSG em 2017?", options: ["€100M", "€150M", "€222M", "€250M"], answer: "€222M" },
+            { question: "Quantas Ligue 1 Neymar venceu com o PSG até 2025?", options: ["3", "4", "5", "6"], answer: "5" },
+            { question: "Qual foi o primeiro troféu individual de Neymar no PSG?", options: ["Melhor Jogador da Ligue 1", "Chuteira de Ouro", "Bola de Ouro", "Nenhum"], answer: "Melhor Jogador da Ligue 1" },
+            { question: "Neymar foi o artilheiro da Copa do Rei em que ano?", options: ["2014-15", "2015-16", "2016-17", "2017-18"], answer: "2014-15" },
+            { question: "Quantos gols Neymar marcou pela Seleção Brasileira até março de 2025?", options: ["77", "79", "81", "83"], answer: "79" },
+            { question: "Qual foi o primeiro título de Neymar com a Seleção Brasileira?", options: ["Copa América", "Confederações", "Olimpíadas", "Copa do Mundo"], answer: "Confederações" },
+            { question: "Em que ano Neymar ganhou o Ouro Olímpico com o Brasil?", options: ["2012", "2014", "2016", "2020"], answer: "2016" },
+            { question: "Quantos gols Neymar marcou na Copa do Mundo de 2014?", options: ["2", "4", "6", "8"], answer: "4" },
+            { question: "Qual prêmio Neymar ganhou na Confederações de 2013?", options: ["Chuteira de Ouro", "Bola de Ouro", "Melhor Jovem", "Nenhum"], answer: "Bola de Ouro" },
+            { question: "Neymar terminou em que posição no Ballon d'Or de 2015?", options: ["1º", "2º", "3º", "4º"], answer: "3º" },
+            { question: "Quantas assistências Neymar fez na Champions League 2016-17?", options: ["8", "10", "11", "13"], answer: "11" },
+            { question: "Qual clube Neymar enfrentou na final da Champions de 2015?", options: ["Real Madrid", "Juventus", "Bayern", "Man City"], answer: "Juventus" },
+            { question: "Quantos títulos Neymar ganhou com o Barcelona?", options: ["5", "7", "9", "10"], answer: "10" },
+            { question: "Qual foi o primeiro gol internacional de Neymar?", options: ["EUA", "México", "Argentina", "Japão"], answer: "EUA" },
+            { question: "Neymar estreou no Al-Hilal em que ano?", options: ["2022", "2023", "2024", "2025"], answer: "2023" },
+            { question: "Qual lesão tirou Neymar da Copa do Mundo 2014?", options: ["Tornozelo", "Joelho", "Costas", "Perna"], answer: "Costas" },
+            { question: "Quantos jogos Neymar perdeu por lesão no PSG?", options: ["50", "80", "119", "150"], answer: "119" },
+            { question: "Neymar voltou ao Santos em que ano?", options: ["2023", "2024", "2025", "Ainda não voltou"], answer: "2025" },
+            { question: "Qual o número da camisa de Neymar no PSG?", options: ["7", "10", "11", "9"], answer: "10" },
+            { question: "Quantos hat-tricks Neymar fez pelo Barcelona?", options: ["2", "4", "6", "8"], answer: "4" },
+            { question: "Qual foi o adversário na final da Confederações 2013?", options: ["Itália", "Espanha", "México", "Uruguai"], answer: "Espanha" },
+            { question: "Neymar ganhou o Puskás em que ano?", options: ["2010", "2011", "2012", "2013"], answer: "2011" },
+            { question: "Quantas vezes Neymar foi eleito para o FIFA FIFPro World11?", options: ["1", "2", "3", "4"], answer: "2" },
+            { question: "Qual o maior rival de Neymar na Seleção em número de gols?", options: ["Pelé", "Ronaldo", "Romário", "Zico"], answer: "Pelé" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userName = "";
+
+        function startQuiz() {
+            userName = document.getElementById('username').value.trim();
+            if (userName === "") {
+                alert("Por favor, insira seu nome!");
+                return;
+            }
+            document.getElementById('login-container').classList.remove('active');
+            document.getElementById('quiz-container').classList.add('active');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question').textContent = q.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = "";
+            q.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(btn);
+            });
+            document.getElementById('result').textContent = "";
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const celebrationImg = document.getElementById('neymar-celebration');
+            
+            if (selected === q.answer) {
+                score++;
+                document.getElementById('result').textContent = "Correto!";
+                // Mostra a animação de comemoração
+                celebrationImg.style.display = 'block';
+                setTimeout(() => {
+                    celebrationImg.style.display = 'none';
+                }, 1000); // Esconde após 1 segundo
+            } else {
+                document.getElementById('result').textContent = `Errado! A resposta correta é: ${q.answer}`;
+            }
+            
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                setTimeout(showQuestion, 1000);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('quiz-container').innerHTML = `
+                        <h1>Resultado Final</h1>
+                        <p>${userName}, você acertou ${score} de ${questions.length} perguntas!</p>
+                        <button onclick="location.reload()">Jogar Novamente</button>
+                    `;
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
